@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北一區學習園地：八星等權益客戶認證測驗</title>
+<style>
+    body {
+        font-family: "Microsoft JhengHei", Arial, sans-serif;
+        background-color: #f4f6f8;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-top: 6px solid #b22222; /* 遠銀紅 */
+    }
+    header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    h1 {
+        color: #b22222;
+        margin: 0 0 10px 0;
+        font-size: 1.8em;
+    }
+    .subtitle {
+        color: #666;
+        font-size: 1em;
+    }
+    .alert-box {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #ffeeba;
+        margin-bottom: 20px;
+        font-size: 0.95em;
+    }
+    .question-card {
+        background: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+    .question-card:hover {
+        border-color: #b22222;
+    }
+    .q-title {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+    .options label {
+        display: block;
+        padding: 10px 15px;
+        margin: 8px 0;
+        background: #f8f9fa;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+    }
+    .options label:hover {
+        background: #e9ecef;
+    }
+    input[type="radio"] {
+        margin-right: 12px;
+        transform: scale(1.2);
+    }
+    button.submit-btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: #b22222;
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 6px rgba(178, 34, 34, 0.3);
+    }
+    button.submit-btn:hover {
+        background-color: #900000;
+    }
+    
+    /* 結果區域樣式 */
+    #result-area {
+        display: none;
+        margin-top: 30px;
+        padding: 25px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .score-display {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    .pass {
+        background-color: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+    }
+    .fail {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+    }
+    
+    /* 解析樣式 */
+    .explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #f1f3f5;
+        border-left: 4px solid #6c757d;
+        font-size: 0.9em;
+        color: #555;
+        display: none; /* 預設隱藏 */
+    }
+    .correct-text { color: #28a745; font-weight: bold; }
+    .wrong-text { color: #dc3545; font-weight: bold; }
+
+    /* 重新測驗按鈕 */
+    .retry-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 30px;
+        background-color: #555;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>北一區學習園地</h1>
+        <div class="subtitle">八星等權益客戶：資格與規範認證測驗</div>
+    </header>
+
+    <div class="alert-box">
+        <strong>⚠️ 測驗說明：</strong>
+        <ul>
+            <li>本測驗共 10 題，由題庫隨機抽出。</li>
+            <li>為確保同仁對定義無模糊空間，<strong>及格分數為 90 分</strong>。</li>
+            <li>請依據最新「財管 2.0 權益手冊」作答，避免因錯誤資訊導致客訴。</li>
+        </ul>
+    </div>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <!-- 題目將由 JavaScript 動態生成 -->
+        </div>
+        <button type="button" class="submit-btn" onclick="submitQuiz()">提交測驗</button>
+    </form>
+
+    <div id="result-area"></div>
+</div>
+
+<script>
+    // 完整題庫 (共 15 題)
+    const questionBank = [
+        {
+            id: 1,
+            question: "【資格定義】關於高資產客戶的資產門檻（AUM），下列計算方式何者正確？",
+            options: [
+                "A. 總資產達 1 億元即可，包含房地產市值",
+                "B. 可投資資產淨值達 1 億元以上，嚴格規定「不含不動產」",
+                "C. 只要在本行存款達 3,000 萬元即可自動升等",
+                "D. 包含保險、基金與自住房屋現值總和達 1 億元"
+            ],
+            answer: "B",
+            note: "解析：定義標準為「如同有投資經驗的億級 PI」，且明確規範資產計算「不含不動產」。(參見教材 P.4, P.17)"
+        },
+        {
+            id: 2,
+            question: "【資格定義】若客戶無他行資產證明，僅在本行有資產，需符合何種條件？",
+            options: [
+                "A. 本行資產達 1,000 萬元並簽署切結書",
+                "B. 本行資產達 3,000 萬元以上，並簽署財力聲明書聲明總資產達 1 億元（附佐證）",
+                "C. 本行資產達 5,000 萬元，不需其他證明",
+                "D. 僅需理專主管擔保即可"
+            ],
+            answer: "B",
+            note: "解析：在本行已有 3,000 萬元以上者，需提供財力聲明書聲明總資產達 1 億元並檢附佐證。(參見教材 P.4)"
+        },
+        {
+            id: 3,
+            question: "【專業評估】關於「專業知識問卷」的合格標準，下列何者正確？",
+            options: [
+                "A. 共 10 題，達 6 分及格",
+                "B. 共 10 題，達 7 分及格",
+                "C. 共 10 題，達 8 分（含）以上始符合資格",
+                "D. 共 20 題，達 15 分及格"
+            ],
+            answer: "C",
+            note: "解析：問卷共 10 題，每題 1 分，需達 8 分（含）以上才算符合資格。(參見教材 P.4, P.17)"
+        },
+        {
+            id: 4,
+            question: "【專業評估】關於「交易經驗」認定（近 2 年內），下列何者「不符合」標準？",
+            options: [
+                "A. 申購或轉換金融商品交易次數達 10 次以上（且有 2 種不同商品）",
+                "B. 持有 2 筆結構型或衍生性商品達 6 個月以上",
+                "C. 持有 2 筆結構型或衍生性商品至到期",
+                "D. 僅持有一般股票型基金 2 筆，未達 6 個月"
+            ],
+            answer: "D",
+            note: "解析：交易經驗需符合：(1)次數達10次且2種商品 (2)結構型/衍生性商品持有6個月以上 (3)結構型/衍生性商品持有至到期。選項 D 不符。(參見教材 P.4)"
+        },
+        {
+            id: 5,
+            question: "【覆審機制】為確保合規，對於高資產客戶的「資格覆審」頻率為何？",
+            options: [
+                "A. 每半年一次",
+                "B. 每年一次",
+                "C. 每兩年辦理一次覆審作業",
+                "D. 開戶後永久有效"
+            ],
+            answer: "C",
+            note: "解析：規定為「每兩年」辦理一次覆審作業；另需「每年」定期評估資產價值。(參見教材 P.5, P.18)"
+        },
+        {
+            id: 6,
+            question: "【違規處理】若客戶拒絕配合覆審或無法聯繫，將面臨什麼後果？",
+            options: [
+                "A. 僅會收到警告信函",
+                "B. 將暫停業務，直至重新完成審查",
+                "C. 直接結清所有帳戶",
+                "D. 降級為一般客戶但不影響交易"
+            ],
+            answer: "B",
+            note: "解析：客戶若未配合審查，將「暫停業務」，須紀錄留存備查，恢復業務前需再次完成審查。(參見教材 P.5)"
+        },
+        {
+            id: 7,
+            question: "【迎賓禮遇】申請成為八星等客戶可享「王品集團時尚私聚」禮遇（價值 3,000 元），其限制為何？",
+            options: [
+                "A. 人人有獎，無時間限制",
+                "B. 限前 100 位，期限至 2025 年底",
+                "C. 限前 50 位，期限至 2026/3/31",
+                "D. 需資產達 2 億元才可申請"
+            ],
+            answer: "C",
+            note: "解析：優惠限制為「限前 50 位」，且活動期限至 2026/3/31。(參見教材 P.2, P.15)"
+        },
+        {
+            id: 8,
+            question: "【存款優惠】目前提供給八星等客戶的台幣優惠定存（一年期），利率為多少？",
+            options: [
+                "A. 1.5%",
+                "B. 1.6%",
+                "C. 1.8%",
+                "D. 2.0%"
+            ],
+            answer: "C",
+            note: "解析：八星等權益包含一年期 1.8% 台幣優惠定存。(參見教材 P.2, P.15)"
+        },
+        {
+            id: 9,
+            question: "【典藏套組】關於「客製化金屬行李掛牌」的申請與發送，下列流程何者正確？",
+            options: [
+                "A. 現場直接拿庫存給客戶",
+                "B. 需請客戶提供英文姓名，由 ASM 協助統籌登錄製作，後續再轉交",
+                "C. 請客戶自行聯繫廠商製作",
+                "D. 只有資產達 3 億元客戶才有"
+            ],
+            answer: "B",
+            note: "解析：行李掛牌為客製化商品（需刻英文名），需由各區業務主管 (ASM) 協助至內部路徑登錄製作。(參見教材 P.15, P.25)"
+        },
+        {
+            id: 10,
+            question: "【權益範圍】關於每月國內多項交易免手續費優惠，下列敘述何者正確？",
+            options: [
+                "A. 包含所有海外匯款手續費",
+                "B. 適用範圍涵蓋全球分行",
+                "C. 交易服務範圍為臺灣地區，未包含海外地區",
+                "D. 僅限臨櫃交易，網銀不適用"
+            ],
+            answer: "C",
+            note: "解析：注意事項載明：交易服務範圍為臺灣地區，未包含海外地區。(參見教材 P.16, P.26)"
+        },
+        {
+            id: 11,
+            question: "【申請方式】客戶欲成為高資產客戶，應透過何種方式申請？",
+            options: [
+                "A. 系統自動判斷，無需申請",
+                "B. 僅需口頭告知理專即可",
+                "C. 需以書面形式申請",
+                "D. 用 Line 通知客服即可"
+            ],
+            answer: "C",
+            note: "解析：規定明確指出「客戶需以書面形式申請」成為高資產客戶。(參見教材 P.4, P.17)"
+        },
+        {
+            id: 12,
+            question: "【典藏套組】理專使用「典藏套組」的主要目的為何？",
+            options: [
+                "A. 僅為了送禮物",
+                "B. 作為建立關係的起點，利用 DEMO 版進行展演與預告權益",
+                "C. 用來裝飾分行櫃檯",
+                "D. 讓客戶帶回家給小孩玩"
+            ],
+            answer: "B",
+            note: "解析：DEMO 套組是為了讓前線同仁熟悉內容，並在與客戶互動時作為預告與說明工具。(參見教材 P.15, P.25)"
+        },
+        {
+            id: 13,
+            question: "【資格定義】關於資產（AUM）的定期評估頻率，下列何者正確？",
+            options: [
+                "A. 每季檢視一次",
+                "B. 每年檢視一次",
+                "C. 每兩年檢視一次",
+                "D. 不需定期檢視"
+            ],
+            answer: "B",
+            note: "解析：每年定期評估客戶於本行之可投資資產價值；每兩年則進行資格覆審。(參見教材 P.5, P.18)"
+        },
+        {
+            id: 14,
+            question: "【權益亮點】八星等客戶權益強調的三大核心價值（Wealth, Well-being, Welfare）中，Welfare 指的是？",
+            options: [
+                "A. 財富增值",
+                "B. 社會關懷與慈善信託",
+                "C. 健康升級",
+                "D. 旅遊優惠"
+            ],
+            answer: "B",
+            note: "解析：Wealth (財富)、Well-being (幸福)、Welfare (社會關懷/慈善信託)。(參見教材 P.1, P.14)"
+        },
+        {
+            id: 15,
+            question: "【客訴預防】若客戶詢問「我有一間市值 2 億的豪宅，為何不能算八星等？」，理專應如何正確回答？",
+            options: [
+                "A. 可以，我幫您爭取看看",
+                "B. 抱歉，金管會規定高資產客戶標準為可投資資產淨值，不包含不動產",
+                "C. 只要您把權狀拿來抵押就可以",
+                "D. 因為您的房子屋齡太老"
+            ],
+            answer: "B",
+            note: "解析：定義明確指出「不含不動產」。為避免錯誤期待，理專應明確說明此為法規與銀行定義。(參見教材 P.4, P.16)"
+        }
+    ];
+
+    // 全域變數
+    let currentQuestions = [];
+    
+    // 初始化測驗
+    function initQuiz() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = ''; // 清空
+        document.getElementById('result-area').style.display = 'none';
+        document.querySelector('.submit-btn').style.display = 'block';
+
+        // 1. 隨機洗牌
+        const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+        // 2. 取前 10 題
+        currentQuestions = shuffled.slice(0, 10);
+
+        // 3. 渲染題目
+        currentQuestions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${index}`;
+            
+            let optionsHtml = '';
+            q.options.forEach(opt => {
+                const val = opt.substring(0, 1); // 取 A, B, C, D
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="q${index}" value="${val}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="q-title">${index + 1}. ${q.question}</div>
+                <div class="options">${optionsHtml}</div>
+                <div class="explanation" id="expl-${index}">${q.note}</div>
+            `;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    // 提交計分
+    function submitQuiz() {
+        let score = 0;
+        let unanswered = false;
+        const total = currentQuestions.length; // 10題
+
+        // 檢查是否全部作答
+        for (let i = 0; i < total; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) {
+                unanswered = true;
+                document.getElementById(`card-${i}`).style.border = "2px solid #dc3545"; // 標示未答
+            } else {
+                document.getElementById(`card-${i}`).style.border = "1px solid #e0e0e0"; // 復原
+            }
+        }
+
+        if (unanswered) {
+            alert("尚有題目未作答，請完成後再提交！");
+            return;
+        }
+
+        // 計算分數與顯示解析
+        currentQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`).value;
+            const explDiv = document.getElementById(`expl-${index}`);
+            const cardDiv = document.getElementById(`card-${index}`);
+            
+            explDiv.style.display = 'block'; // 顯示解析
+
+            if (selected === q.answer) {
+                score += 10; // 每題 10 分
+                explDiv.innerHTML = `<span class="correct-text">✅ 答對！</span> ` + explDiv.innerHTML;
+                cardDiv.style.borderLeft = "5px solid #28a745";
+            } else {
+                explDiv.innerHTML = `<span class="wrong-text">❌ 答錯！正確答案是 ${q.answer}。</span><br>` + explDiv.innerHTML;
+                cardDiv.style.borderLeft = "5px solid #dc3545";
+                cardDiv.style.backgroundColor = "#fff5f5";
+            }
+        });
+
+        // 顯示結果
+        const resultArea = document.getElementById('result-area');
+        const submitBtn = document.querySelector('.submit-btn');
+        
+        submitBtn.style.display = 'none'; // 隱藏提交按鈕
+        resultArea.style.display = 'block';
+
+        if (score >= 90) {
+            resultArea.className = 'pass';
+            resultArea.innerHTML = `
+                <div class="score-display">您的得分：${score} 分</div>
+                <h3>🎉 恭喜通過北一區八星等認證！</h3>
+                <p>您已精確掌握相關權益與定義。</p>
+                <div onclick="initQuiz()" class="retry-btn">再次測驗</div>
+            `;
+        } else {
+            resultArea.className = 'fail';
+            resultArea.innerHTML = `
+                <div class="score-display">您的得分：${score} 分</div>
+                <h3>⚠️ 未達標準（需 90 分及格）</h3>
+                <p>請重新檢視錯誤題目解析，確保面對客戶時資訊正確。</p>
+                <div onclick="initQuiz()" class="retry-btn">重新測驗</div>
+            `;
+        }
+
+        // 捲動到結果區
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 頁面載入時初始化
+    window.onload = initQuiz;
+
+</script>
+
+</body>

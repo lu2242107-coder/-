@@ -1,0 +1,538 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北一區學習園地：八星等客戶專屬生日禮認證</title>
+<style>
+    :root {
+        --primary-red: #b22222; /* 遠銀紅 */
+        --bg-color: #f4f6f8;
+        --card-bg: #ffffff;
+        --text-color: #333;
+        --border-radius: 12px;
+    }
+
+    body {
+        font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-top: 6px solid var(--primary-red);
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    h1 {
+        color: var(--primary-red);
+        margin: 0 0 10px 0;
+        font-size: 1.8em;
+    }
+
+    .subtitle {
+        color: #555;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .alert-box {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 5px solid #2196f3;
+        margin-bottom: 25px;
+        font-size: 0.95em;
+    }
+
+    .question-card {
+        background: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+
+    .q-tag {
+        display: inline-block;
+        font-size: 0.85em;
+        background-color: #f0f0f0;
+        color: #555;
+        padding: 3px 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .q-title {
+        font-weight: bold;
+        font-size: 1.15em;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .options label {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 15px;
+        margin: 8px 0;
+        background: #f9f9f9;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .options label:hover {
+        background: #eef2f5;
+        border-color: #ccc;
+    }
+
+    input[type="radio"] {
+        margin-right: 12px;
+        margin-top: 5px;
+        transform: scale(1.2);
+        flex-shrink: 0;
+    }
+
+    button.submit-btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: var(--primary-red);
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 6px rgba(178, 34, 34, 0.3);
+    }
+
+    button.submit-btn:hover {
+        background-color: #900000;
+    }
+
+    /* 解析與結果區 */
+    .explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #fff;
+        border-left: 4px solid #6c757d;
+        font-size: 0.95em;
+        color: #444;
+        display: none;
+    }
+
+    .correct-text { color: #28a745; font-weight: bold; }
+    .wrong-text { color: #dc3545; font-weight: bold; }
+
+    #result-area {
+        display: none;
+        text-align: center;
+        margin-top: 30px;
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    .pass {
+        background-color: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+    }
+
+    .fail {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+    }
+
+    .score-display {
+        font-size: 3em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .retry-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 35px;
+        background-color: #555;
+        color: white;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>北一區學習園地</h1>
+        <div class="subtitle">八星等客戶專屬生日禮認證</div>
+    </header>
+
+    <div class="alert-box">
+        <strong>⚠️ 測驗重點（防客訴須知）：</strong>
+        <ul>
+            <li>目的：熟悉「生日禮二選一」的內容差異、預約流程及使用限制。</li>
+            <li>規則：題庫隨機抽出 10 題，選項順序隨機。</li>
+            <li><strong>及格標準：90 分</strong>（高標準要求，流程不可出錯）。</li>
+        </ul>
+    </div>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <!-- 題目由 JS 動態生成 -->
+        </div>
+        <button type="button" class="submit-btn" onclick="submitQuiz()">提交測驗</button>
+    </form>
+
+    <div id="result-area"></div>
+</div>
+
+<script>
+    // 題庫資料 (依據來源 [1]-[2] 編制)
+    const questionBank = [
+        {
+            id: 1,
+            tag: "禮品選項",
+            question: "八星等客戶的專屬生日禮，提供哪兩種方案供客戶「二選一」？",
+            options: [
+                "AVEDA 時尚體驗 (頭皮微循環) 或 生生優動 (健康物理治療)",
+                "SOGO 禮券 5000 元 或 遠東飯店住宿券",
+                "現金回饋 3000 元 或 點數 5 萬點",
+                "只能選擇 AVEDA，無其他選項"
+            ],
+            answer: "AVEDA 時尚體驗 (頭皮微循環) 或 生生優動 (健康物理治療)",
+            note: "解析：生日禮提供「時尚體驗：AVEDA 蘊活欣生訂製療程」與「健康體驗：生生優動 VIP 優伴服務」二選一。[來源：11]"
+        },
+        {
+            id: 2,
+            tag: "AVEDA 內容",
+            question: "關於 AVEDA 的「蘊活欣生訂製療程」，其服務重點與時間約為？",
+            options: [
+                "90~120 分鐘，含獨家節奏式按摩 28 道，強化髮肌自癒力",
+                "30 分鐘快速剪髮",
+                "60 分鐘全身精油按摩",
+                "僅提供洗髮服務，約 40 分鐘"
+            ],
+            answer: "90~120 分鐘，含獨家節奏式按摩 28 道，強化髮肌自癒力",
+            note: "解析：AVEDA 療程時間約 90-120 分鐘，特色為獨家節奏式按摩 28 道深度頭皮按摩。[來源：13][3]"
+        },
+        {
+            id: 3,
+            tag: "流程時效",
+            question: "RM 需在每月幾號前，於 Notes 回覆確認次月客戶的生日禮選項？",
+            options: [
+                "每月 20 號前",
+                "每月 1 號前",
+                "每月最後一天",
+                "客戶生日前一天"
+            ],
+            answer: "每月 20 號前",
+            note: "解析：流程：①客群15號前通知 -> ②RM確認後於 20 號前 Notes 回覆選項 -> ③客群月底前寄送兌換券。[來源：14][4]"
+        },
+        {
+            id: 4,
+            tag: "使用期限",
+            question: "AVEDA 的數位兌換券，其使用期限為多久？（客訴雷區，請務必提醒客戶）",
+            options: [
+                "使用期限 90 天",
+                "使用期限 30 天",
+                "使用期限 1 年",
+                "沒有期限"
+            ],
+            answer: "使用期限 90 天",
+            note: "解析：AVEDA 體驗療程服務約 90~120 分鐘，使用期限為 90 天，逾期失效。[來源：14]"
+        },
+        {
+            id: 5,
+            tag: "生生優動內容",
+            question: "選擇「生生優動」的客戶，可享有哪項主要服務？",
+            options: [
+                "VIP 優伴服務 4 週 (實體/視訊二擇一 + 文字陪伴) + Youdon APP 12 個月",
+                "終身免費物理治療",
+                "免費贈送按摩椅",
+                "僅提供 APP 下載，無真人服務"
+            ],
+            answer: "VIP 優伴服務 4 週 (實體/視訊二擇一 + 文字陪伴) + Youdon APP 12 個月",
+            note: "解析：包含 Youdon APP 12 個月使用權，以及 4 週的 VIP 優伴服務（含醫師+治療師團隊）。[來源：19]"
+        },
+        {
+            id: 6,
+            tag: "生生優動限制",
+            question: "關於「生生優動」的實體看診服務時間，下列何者正確？（避免白跑一趟）",
+            options: [
+                "僅限工作日之週一至週五 (不含國定假日及例假日)",
+                "隨時皆可，包含週末與假日",
+                "僅限週末預約",
+                "24 小時皆可預約"
+            ],
+            answer: "僅限工作日之週一至週五 (不含國定假日及例假日)",
+            note: "解析：預約實體看診服務「不含國定假日及例假日」，請務必告知客戶僅限平日。[來源：20]"
+        },
+        {
+            id: 7,
+            tag: "預約取消",
+            question: "若客戶預約了生生優動的服務但需改期，最晚需在何時通知？",
+            options: [
+                "看診日之前一個工作天",
+                "看診當天早上",
+                "看診前 1 小時",
+                "不用通知，直接不去即可"
+            ],
+            answer: "看診日之前一個工作天",
+            note: "解析：如欲修改或取消，請於看診日之「前一個工作天」通知客服或透過 LINE 官方帳號修改。[來源：20]"
+        },
+        {
+            id: 8,
+            tag: "發送方式",
+            question: "生日禮的兌換券（無論是 AVEDA 或生生優動），最終是如何提供給 RM 的？",
+            options: [
+                "由客群中心以 Notes 寄送數位序號/兌換券給 RM",
+                "直接寄實體信件給客戶",
+                "由 RM 自己去系統列印",
+                "客戶自己去分行領取"
+            ],
+            answer: "由客群中心以 Notes 寄送數位序號/兌換券給 RM",
+            note: "解析：流程為客群中心於月底前透過 Notes 寄送，再由 RM 轉發或親訪交付給客戶。[來源：14][4]"
+        },
+        {
+            id: 9,
+            tag: "AVEDA 據點",
+            question: "AVEDA 肯夢直營 Salon 門市主要分布在哪些城市？",
+            options: [
+                "台北、台中、台南、高雄",
+                "僅限台北市",
+                "全台各縣市皆有",
+                "僅限百貨公司內"
+            ],
+            answer: "台北、台中、台南、高雄",
+            note: "解析：門市列表顯示分布於台北 (大安/信義/中山等)、台中、台南、高雄。[來源：14]"
+        },
+        {
+            id: 10,
+            tag: "生生優動團隊",
+            question: "生生優動的「優伴服務」是由哪些專業人員組成的團隊？",
+            options: [
+                "醫師 + 物理治療師 + 運動指導員",
+                "僅有推拿師",
+                "僅有健身教練",
+                "AI 機器人自動回覆"
+            ],
+            answer: "醫師 + 物理治療師 + 運動指導員",
+            note: "解析：由台灣頂尖醫療體系專業團隊組成：醫師、物理治療師、運動指導員協作。[來源：19]"
+        },
+        {
+            id: 11,
+            tag: "服務對象",
+            question: "生生優動的服務特別適合推薦給哪類需求的客戶？",
+            options: [
+                "有長期疼痛管理、術後復健或需要個人化運動處方者",
+                "想做醫美整形者",
+                "想做全身精油 SPA 者",
+                "需要心理諮商者"
+            ],
+            answer: "有長期疼痛管理、術後復健或需要個人化運動處方者",
+            note: "解析：服務涵蓋疼痛科診所、物理治療所，針對疼痛管理、復健及運動處方。[來源：16][5]"
+        },
+        {
+            id: 12,
+            tag: "AVEDA 特色",
+            question: "AVEDA 的品牌特色為？",
+            options: [
+                "美國環保美妝品牌，強調「純香 (pure-fume)」與身心靈平衡",
+                "法國奢華香水品牌",
+                "日本藥妝品牌",
+                "主打化學合成高效保養"
+            ],
+            answer: "美國環保美妝品牌，強調「純香 (pure-fume)」與身心靈平衡",
+            note: "解析：AVEDA 緣起於印度梵文，為美國環保美妝品牌，特有註冊定名「純香」。[來源：12]"
+        },
+        {
+            id: 13,
+            tag: "生生優動 APP",
+            question: "生生優動的 Youdon APP 主要功能為何？",
+            options: [
+                "AI 運動處方系統、隨時隨地運動、1500+ 標準示範影片",
+                "線上掛號系統",
+                "運動用品購物商城",
+                "僅為計步器功能"
+            ],
+            answer: "AI 運動處方系統、隨時隨地運動、1500+ 標準示範影片",
+            note: "解析：APP 提供智慧物理治療、AI 運動處方、1500+ 標準示範動作影片。[來源：18][6]"
+        },
+        {
+            id: 14,
+            tag: "生生優動預約",
+            question: "客戶收到生生優動的序號後，應如何進行預約？",
+            options: [
+                "填寫線上表單預約診療方式 -> 專人聯繫安排",
+                "直接跑去診所現場排隊",
+                "打電話給理專預約",
+                "無法預約，只能線上看影片"
+            ],
+            answer: "填寫線上表單預約診療方式 -> 專人聯繫安排",
+            note: "解析：客戶需透過「線上表單預約診療方式」（實體或視訊），由客服依表單資訊聯繫安排。[來源：20]"
+        },
+        {
+            id: 15,
+            tag: "客戶確認",
+            question: "若 RM 未在期限內回覆客戶的生日禮選擇，可能會導致什麼後果？",
+            options: [
+                "客戶可能無法如期收到生日禮兌換券，造成客訴",
+                "系統會自動隨機幫客戶選",
+                "客戶會獲得雙份禮物",
+                "沒有影響，隨時都可以申請"
+            ],
+            answer: "客戶可能無法如期收到生日禮兌換券，造成客訴",
+            note: "解析：流程有明確時間點（每月 20 號前 Notes 回覆），逾期將影響次月初的發送流程。[來源：14][4]"
+        }
+    ];
+
+    // 洗牌演算法
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    let currentQuestions = [];
+
+    // 初始化測驗
+    function initQuiz() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = '';
+        document.getElementById('result-area').style.display = 'none';
+        document.querySelector('.submit-btn').style.display = 'block';
+
+        // 1. 隨機選出 10 題
+        const shuffledQuestions = shuffleArray([...questionBank]);
+        currentQuestions = shuffledQuestions.slice(0, 10);
+
+        // 2. 生成 HTML
+        currentQuestions.forEach((q, index) => {
+            // 複製選項並隨機打亂
+            let shuffledOptions = shuffleArray([...q.options]);
+
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${index}`;
+
+            // 生成選項 HTML
+            let optionsHtml = '';
+            shuffledOptions.forEach((opt) => {
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="q${index}" value="${opt}">
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="q-tag">#${q.tag}</div>
+                <div class="q-title">Q${index + 1}. ${q.question}</div>
+                <div class="options">${optionsHtml}</div>
+                <div class="explanation" id="expl-${index}">${q.note}</div>
+            `;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    // 提交邏輯
+    function submitQuiz() {
+        let score = 0;
+        let unanswered = false;
+        
+        // 檢查未作答
+        for (let i = 0; i < 10; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) {
+                unanswered = true;
+                document.getElementById(`card-${i}`).style.border = "2px solid #dc3545";
+            } else {
+                document.getElementById(`card-${i}`).style.border = "1px solid #e0e0e0";
+            }
+        }
+
+        if (unanswered) {
+            alert("尚有題目未作答，請完成後再提交！");
+            return;
+        }
+
+        // 計分
+        currentQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`).value;
+            const explDiv = document.getElementById(`expl-${index}`);
+            const cardDiv = document.getElementById(`card-${index}`);
+            
+            explDiv.style.display = 'block'; // 顯示解析
+
+            if (selected === q.answer) {
+                score += 10;
+                explDiv.innerHTML = `<span class="correct-text">✅ 正確！</span> ` + explDiv.innerText;
+                cardDiv.style.borderLeft = "5px solid #28a745";
+            } else {
+                explDiv.innerHTML = `<span class="wrong-text">❌ 錯誤！</span> 正確答案為：<strong>${q.answer}</strong><br><br>` + explDiv.innerText;
+                cardDiv.style.borderLeft = "5px solid #dc3545";
+                cardDiv.style.backgroundColor = "#fff5f5";
+            }
+        });
+
+        // 顯示結果
+        const resultArea = document.getElementById('result-area');
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.style.display = 'none';
+        resultArea.style.display = 'block';
+
+        if (score >= 90) {
+            resultArea.className = 'pass';
+            resultArea.innerHTML = `
+                <div class="score-display">${score} 分</div>
+                <h2>🎉 恭喜通過認證！</h2>
+                <p>您已精確掌握生日禮作業流程與使用限制。</p>
+                <div class="retry-btn" onclick="initQuiz()">再次測驗</div>
+            `;
+        } else {
+            resultArea.className = 'fail';
+            resultArea.innerHTML = `
+                <div class="score-display">${score} 分</div>
+                <h2>⚠️ 未達標準 (需 90 分)</h2>
+                <p>請特別注意「使用期限」與「預約限制 (平日限定)」，避免客訴發生。</p>
+                <div class="retry-btn" onclick="initQuiz()">重新測驗</div>
+            `;
+        }
+        
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 啟動
+    window.onload = initQuiz;
+</script>
+
+</body>
+</html>

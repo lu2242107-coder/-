@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北一區學習園地：八星等權益(存款及投資)認證</title>
+<style>
+    :root {
+        --primary-red: #b22222; /* 遠銀紅 */
+        --bg-color: #f4f6f8;
+        --card-bg: #ffffff;
+        --text-color: #333;
+        --border-radius: 12px;
+    }
+
+    body {
+        font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-top: 6px solid var(--primary-red);
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    h1 {
+        color: var(--primary-red);
+        margin: 0 0 10px 0;
+        font-size: 1.8em;
+    }
+
+    .subtitle {
+        color: #666;
+        font-weight: bold;
+    }
+
+    .alert-box {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 5px solid #2196f3;
+        margin-bottom: 25px;
+        font-size: 0.95em;
+    }
+
+    .question-card {
+        background: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .question-card:hover {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .q-tag {
+        display: inline-block;
+        font-size: 0.8em;
+        background-color: #f0f0f0;
+        color: #555;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .q-title {
+        font-weight: bold;
+        font-size: 1.15em;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .options label {
+        display: flex;
+        align-items: flex-start; /* 讓選項文字對齊 */
+        padding: 12px 15px;
+        margin: 8px 0;
+        background: #f9f9f9;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .options label:hover {
+        background: #eef2f5;
+        border-color: #ccc;
+    }
+
+    input[type="radio"] {
+        margin-right: 12px;
+        margin-top: 5px; /* 對齊文字 */
+        transform: scale(1.2);
+        flex-shrink: 0;
+    }
+
+    button.submit-btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: var(--primary-red);
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 6px rgba(178, 34, 34, 0.3);
+    }
+
+    button.submit-btn:hover {
+        background-color: #900000;
+    }
+
+    /* 解析與結果區 */
+    .explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #fff;
+        border-left: 4px solid #6c757d;
+        font-size: 0.95em;
+        color: #444;
+        display: none;
+    }
+
+    .correct-text { color: #28a745; font-weight: bold; }
+    .wrong-text { color: #dc3545; font-weight: bold; }
+
+    #result-area {
+        display: none;
+        text-align: center;
+        margin-top: 30px;
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    .pass {
+        background-color: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+    }
+
+    .fail {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+    }
+
+    .score-display {
+        font-size: 3em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .retry-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 35px;
+        background-color: #555;
+        color: white;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>北一區學習園地</h1>
+        <div class="subtitle">八星等權益(存款及投資)認證測驗</div>
+    </header>
+
+    <div class="alert-box">
+        <strong>⚠️ 測驗須知：</strong>
+        <ul>
+            <li>目的：確保同仁熟悉存款優惠、2026 Q1 市場展望及高階理財商品特色。</li>
+            <li>規則：系統將從題庫隨機抽出 10 題，選項順序隨機。</li>
+            <li><strong>及格標準：90 分</strong>（需答對 9 題以上）。</li>
+        </ul>
+    </div>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <!-- 題目由 JS 動態生成 -->
+        </div>
+        <button type="button" class="submit-btn" onclick="submitQuiz()">提交測驗</button>
+    </form>
+
+    <div id="result-area"></div>
+</div>
+
+<script>
+    // 題庫資料 (依據來源簡報內容編制)
+    const questionBank = [
+        {
+            id: 1,
+            tag: "存款權益",
+            question: "關於八星等客戶的「台幣專案定存優惠」，下列敘述何者正確？",
+            options: [
+                "一年期 1.8% 優惠定存 (不排除疊加專案)",
+                "一年期 1.5% 優惠定存",
+                "兩年期 2.0% 優惠定存",
+                "僅限美金定存有優惠"
+            ],
+            answer: "一年期 1.8% 優惠定存 (不排除疊加專案)",
+            note: "解析：八星等客戶享有一年期 1.8% 台幣優惠定存，且除適用各專案外，不排除疊加新資金禮遇。(來源：[3])"
+        },
+        {
+            id: 2,
+            tag: "轉帳優惠",
+            question: "八星等客戶享有「跨行轉帳免手續費」的優惠次數為？",
+            options: [
+                "101 次 (跨提/跨轉)",
+                "99 次",
+                "50 次",
+                "無限次"
+            ],
+            answer: "101 次 (跨提/跨轉)",
+            note: "解析：權益手冊載明提供「101 次跨提/101 次跨轉免手續費」優惠。(來源：[3])"
+        },
+        {
+            id: 3,
+            tag: "大額議價",
+            question: "針對「大額台幣新資金」，本行開放自然人長天期定存利率議價的門檻為？",
+            options: [
+                "單筆 2 億元以上",
+                "單筆 1 億元以上",
+                "單筆 5,000 萬元以上",
+                "單筆 3,000 萬元以上"
+            ],
+            answer: "單筆 2 億元以上",
+            note: "解析：台幣大額議價門檻為「單筆 2 億元以上新資金」，開放自然人長天期定存利率議價。(來源：[3])"
+        },
+        {
+            id: 4,
+            tag: "2026 Q1 展望",
+            question: "根據 2026 Q1 前瞻指引，建議的「資產配置」比例（股:債）約為多少？",
+            options: [
+                "股票 55% : 債券 45%",
+                "股票 70% : 債券 30%",
+                "股票 30% : 債券 70%",
+                "各半 50% : 50%"
+            ],
+            answer: "股票 55% : 債券 45%",
+            note: "解析：2026 Q1 建議配置為：股票配置 55% (美國大型科技股等)，債券與防禦配置 45%。(來源：[4])"
+        },
+        {
+            id: 5,
+            tag: "市場趨勢",
+            question: "2026 Q1 股市趨勢中，關於 AI 產業的發展方向，下列何者正確？",
+            options: [
+                "從「雲端軍備」走向「邊緣應用」(如 AI PC/手機)",
+                "僅集中在大型伺服器建置",
+                "AI 泡沫化，建議全面撤出",
+                "完全轉向傳產製造"
+            ],
+            answer: "從「雲端軍備」走向「邊緣應用」(如 AI PC/手機)",
+            note: "解析：趨勢為 AI 從雲端軍備走向邊緣應用，算力基礎建設轉移至終端應用落地。(來源：[5])"
+        },
+        {
+            id: 6,
+            tag: "客製化債券",
+            question: "本行取得財管 2.0 執照後，可提供高資產客戶申購「不受信評限制」的債券，例如？",
+            options: [
+                "新加坡航空公司債券、杜拜政府國際公債",
+                "一般投資等級公司債",
+                "台灣政府公債",
+                "所有垃圾債券"
+            ],
+            answer: "新加坡航空公司債券、杜拜政府國際公債",
+            note: "解析：特色商品包含具特殊性/稀有性的不受信評限制外國債券，如新加坡航空、杜拜政府公債。(來源：[6], [7])"
+        },
+        {
+            id: 7,
+            tag: "名校債券",
+            question: "針對重視信評的保守型高資產客戶，本行提供哪類特殊的「3A 等級」海外債券？",
+            options: [
+                "美國常春藤名校債券 (如哈佛、耶魯、普林斯頓)",
+                "美國高收益債券",
+                "新興市場主權債",
+                "加密貨幣債券"
+            ],
+            answer: "美國常春藤名校債券 (如哈佛、耶魯、普林斯頓)",
+            note: "解析：專投以上即可申購 3A 等級常春藤名校外國債券，擁有百年校務基金支持，財務穩健。(來源：[8], [9])"
+        },
+        {
+            id: 8,
+            tag: "結構型商品",
+            question: "關於「股權連結型 (FCN)」結構型商品，下列特色何者正確？",
+            options: [
+                "偏好固定收益且能承受股價波動者，具「自動提前出場機制」",
+                "保證 100% 保本，無風險",
+                "連結標的只能選台灣股票",
+                "收益率與股價完全無關"
+            ],
+            answer: "偏好固定收益且能承受股價波動者，具「自動提前出場機制」",
+            note: "解析：FCN 適合偏好領息且能承受波動者，具備「每月領息」、「自動提前出場」及「本金保護機制(非保本)」特色。(來源：[10])"
+        },
+        {
+            id: 9,
+            tag: "結構型商品",
+            question: "關於「匯率型 (Range Accrual)」結構型商品，其獲利模式為何？",
+            options: [
+                "每日觀察匯率是否落在約定區間，當日落入即計息",
+                "賭匯率單邊大幅升值",
+                "保證每年固定 10% 收益",
+                "必須持有到期才能領息"
+            ],
+            answer: "每日觀察匯率是否落在約定區間，當日落入即計息",
+            note: "解析：區間計息機制 (Range Accrual) 為每日觀察，落入區間即計息，適合區間盤整市場。(來源：[2])"
+        },
+        {
+            id: 10,
+            tag: "客戶資格",
+            question: "定義「高資產客戶」的資產門檻（AUM）時，下列哪項資產「不能」計入？",
+            options: [
+                "不動產 (房地產)",
+                "保險商品價值",
+                "基金與股票",
+                "存款"
+            ],
+            answer: "不動產 (房地產)",
+            note: "解析：金管會規定標準為「如同有投資經驗的億級 PI (不含不動產)」。這是最容易造成客訴的誤解點。(來源：[1], [11])"
+        },
+        {
+            id: 11,
+            tag: "資格覆審",
+            question: "高資產客戶的資格並非永久有效，本行須進行覆審的頻率為？",
+            options: [
+                "每兩年辦理一次覆審作業",
+                "每半年一次",
+                "不需覆審",
+                "每年重新申請"
+            ],
+            answer: "每兩年辦理一次覆審作業",
+            note: "解析：每兩年進行覆審，並每年定期評估資產價值。若未配合審查將暫停新業務。(來源：[12], [13])"
+        },
+        {
+            id: 12,
+            tag: "特殊商品",
+            question: "財管 2.0 提供「具特殊性、限額私募」的基金產品，例如？",
+            options: [
+                "Cat Bond (巨災債券)",
+                "一般全球股票基金",
+                "貨幣市場基金",
+                "台股 ETF"
+            ],
+            answer: "Cat Bond (巨災債券)",
+            note: "解析：簡報中提及的最全方位理財商品包含「具特殊性、限額私募基金 (ex. Cat Bond)」。(來源：[14])"
+        },
+        {
+            id: 13,
+            tag: "美元優惠",
+            question: "關於美元存款優惠，針對「事業群主管權限」，USD 10 萬以上的優惠利率參考為何？",
+            options: [
+                "各天期利率 + 5 bps",
+                "各天期利率 + 10 bps",
+                "固定 5%",
+                "無加碼"
+            ],
+            answer: "各天期利率 + 5 bps",
+            note: "解析：大額議價上簽（美元）部分，事業群主管權限為「各天期利率 + 5bps」。(來源：[3])"
+        },
+        {
+            id: 14,
+            tag: "投資策略",
+            question: "2026 Q1 對於股票市場的觀點是「從趨勢回到企業價值」，投資人應更重視什麼？",
+            options: [
+                "企業持續獲利能力與創新能力 (如 AI)",
+                "本夢比 (P/E Ratio 無上限)",
+                "跟隨市場消息面當沖",
+                "完全避開科技股"
+            ],
+            answer: "企業持續獲利能力與創新能力 (如 AI)",
+            note: "解析：市場重新檢視企業獲利能見度，不應只看題材，更重視持續獲利能力與技術獨特性。(來源：[15])"
+        },
+        {
+            id: 15,
+            tag: "債券配置",
+            question: "2026 Q1 對於債券的配置建議為「防禦不是保守，而是保留彈性」，具體操作為？",
+            options: [
+                "中短天期債券搭配，降低利率波動風險，提供穩定現金流",
+                "全押 30 年期公債",
+                "只買非投資等級債博取高息",
+                "出清所有債券"
+            ],
+            answer: "中短天期債券搭配，降低利率波動風險，提供穩定現金流",
+            note: "解析：建議中短天期債券搭配，提供穩定的現金流與靈活性，防禦性配置並不意味著被動。(來源：[16])"
+        }
+    ];
+
+    // 洗牌演算法 (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    let currentQuestions = [];
+
+    // 初始化測驗
+    function initQuiz() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = '';
+        document.getElementById('result-area').style.display = 'none';
+        document.querySelector('.submit-btn').style.display = 'block';
+
+        // 1. 隨機選出 10 題
+        const shuffledQuestions = shuffleArray([...questionBank]);
+        currentQuestions = shuffledQuestions.slice(0, 10);
+
+        // 2. 生成 HTML
+        currentQuestions.forEach((q, index) => {
+            // 複製選項並隨機打亂
+            let shuffledOptions = shuffleArray([...q.options]);
+
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${index}`;
+
+            // 生成選項 HTML
+            let optionsHtml = '';
+            shuffledOptions.forEach((opt) => {
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="q${index}" value="${opt}">
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="q-tag">#${q.tag}</div>
+                <div class="q-title">Q${index + 1}. ${q.question}</div>
+                <div class="options">${optionsHtml}</div>
+                <div class="explanation" id="expl-${index}">${q.note}</div>
+            `;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    // 提交邏輯
+    function submitQuiz() {
+        let score = 0;
+        let unanswered = false;
+        
+        // 檢查未作答
+        for (let i = 0; i < 10; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) {
+                unanswered = true;
+                document.getElementById(`card-${i}`).style.border = "2px solid #dc3545";
+            } else {
+                document.getElementById(`card-${i}`).style.border = "1px solid #e0e0e0";
+            }
+        }
+
+        if (unanswered) {
+            alert("尚有題目未作答，請完成後再提交！");
+            return;
+        }
+
+        // 計分
+        currentQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`).value;
+            const explDiv = document.getElementById(`expl-${index}`);
+            const cardDiv = document.getElementById(`card-${index}`);
+            
+            explDiv.style.display = 'block'; // 顯示解析
+
+            if (selected === q.answer) {
+                score += 10;
+                explDiv.innerHTML = `<span class="correct-text">✅ 正確！</span> ` + explDiv.innerText;
+                cardDiv.style.borderLeft = "5px solid #28a745";
+            } else {
+                explDiv.innerHTML = `<span class="wrong-text">❌ 錯誤！</span> 正確答案為：<strong>${q.answer}</strong><br><br>` + explDiv.innerText;
+                cardDiv.style.borderLeft = "5px solid #dc3545";
+                cardDiv.style.backgroundColor = "#fff5f5";
+            }
+        });
+
+        // 顯示結果
+        const resultArea = document.getElementById('result-area');
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.style.display = 'none';
+        resultArea.style.display = 'block';
+
+        if (score >= 90) {
+            resultArea.className = 'pass';
+            resultArea.innerHTML = `
+                <div class="score-display">${score} 分</div>
+                <h2>🎉 恭喜通過北一區八星等認證！</h2>
+                <p>您已精確掌握高資產客戶的存款權益與投資建議，請繼續保持專業！</p>
+                <div class="retry-btn" onclick="initQuiz()">再次測驗</div>
+            `;
+        } else {
+            resultArea.className = 'fail';
+            resultArea.innerHTML = `
+                <div class="score-display">${score} 分</div>
+                <h2>⚠️ 未達標準 (需 90 分)</h2>
+                <p>請仔細閱讀下方解析，特別注意「資產認定」與「2026 投資展望」的細節，避免客訴風險。</p>
+                <div class="retry-btn" onclick="initQuiz()">重新測驗</div>
+            `;
+        }
+        
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 啟動
+    window.onload = initQuiz;
+</script>
+
+</body>
+</html>

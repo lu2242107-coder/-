@@ -1,0 +1,543 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北一區學習園地：家族辦公室財管 2.0 服務認證</title>
+<style>
+    :root {
+        --primary-color: #b22222; /* 遠銀紅 */
+        --secondary-color: #f8f9fa;
+        --text-color: #333;
+        --border-color: #ddd;
+        --success-bg: #d4edda;
+        --success-text: #155724;
+        --error-bg: #f8d7da;
+        --error-text: #721c24;
+    }
+
+    body {
+        font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+        background-color: #f0f2f5;
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-top: 6px solid var(--primary-color);
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    h1 {
+        color: var(--primary-color);
+        margin: 0 0 10px 0;
+        font-size: 1.8em;
+    }
+
+    .subtitle {
+        color: #666;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .alert-box {
+        background-color: #e3f2fd;
+        color: #0c5460;
+        padding: 15px;
+        border-radius: 6px;
+        border-left: 5px solid #17a2b8;
+        margin-bottom: 25px;
+        font-size: 0.95em;
+    }
+
+    .question-card {
+        background: #fff;
+        margin-bottom: 25px;
+        padding: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+
+    .q-title {
+        font-weight: bold;
+        font-size: 1.15em;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .q-tag {
+        display: inline-block;
+        font-size: 0.8em;
+        background-color: #eee;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .options label {
+        display: block;
+        padding: 12px 15px;
+        margin: 8px 0;
+        background: var(--secondary-color);
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+        position: relative;
+    }
+
+    /* 手機版優化觸控區域 */
+    @media (max-width: 600px) {
+        .options label {
+            padding: 15px; 
+            font-size: 1em;
+        }
+    }
+
+    .options label:hover {
+        background: #e2e6ea;
+        border-color: #ccc;
+    }
+
+    input[type="radio"] {
+        margin-right: 12px;
+        transform: scale(1.2);
+    }
+
+    button.submit-btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: var(--primary-color);
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 6px rgba(178, 34, 34, 0.3);
+    }
+
+    button.submit-btn:hover {
+        background-color: #900000;
+    }
+
+    /* 結果與解析區域 */
+    #result-area {
+        display: none;
+        margin-top: 30px;
+        padding: 25px;
+        border-radius: 8px;
+        text-align: center;
+        animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pass {
+        background-color: var(--success-bg);
+        color: var(--success-text);
+        border: 2px solid #c3e6cb;
+    }
+
+    .fail {
+        background-color: var(--error-bg);
+        color: var(--error-text);
+        border: 2px solid #f5c6cb;
+    }
+
+    .score-display {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #fff;
+        border-left: 4px solid #6c757d;
+        font-size: 0.95em;
+        color: #444;
+        display: none; /* 預設隱藏 */
+        text-align: left;
+    }
+
+    .correct-text { color: #28a745; font-weight: bold; }
+    .wrong-text { color: #dc3545; font-weight: bold; }
+
+    .retry-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 35px;
+        background-color: #555;
+        color: white;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>北一區學習園地</h1>
+        <div class="subtitle">家族辦公室財管 2.0 服務認證</div>
+    </header>
+
+    <div class="alert-box">
+        <strong>⚠️ 測驗說明：</strong>
+        <ul>
+            <li>目的：確保同仁清楚認知「高資產客戶」定義與「家族辦公室」服務資源。</li>
+            <li>規則：系統將從題庫隨機抽取 10 題。</li>
+            <li><strong>及格標準：90 分</strong>（高規格要求，避免錯誤銷售導致客訴）。</li>
+        </ul>
+    </div>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <!-- 題目由 JavaScript 動態生成 -->
+        </div>
+        <button type="button" class="submit-btn" onclick="submitQuiz()">提交測驗</button>
+    </form>
+
+    <div id="result-area"></div>
+</div>
+
+<script>
+    // 題庫資料 (依據來源簡報內容編制)
+    const questionBank = [
+        {
+            id: 1,
+            tag: "資格定義",
+            question: "關於「高資產客戶」的資產門檻認定，下列何者正確？（請注意避免客訴的關鍵點）",
+            options: [
+                "A. 包含客戶名下所有房地產與現金，總額達 1 億元即可",
+                "B. 需提供可投資資產淨值達 1 億元以上，嚴格規定「不含不動產」",
+                "C. 只要在本行往來超過 10 年，資產達 3,000 萬即可自動升等",
+                "D. 由分行經理擔保即可申請"
+            ],
+            answer: "B",
+            note: "解析：根據規定，資產標準為「如同有投資經驗的億級 PI (不含不動產)」。誤將不動產計入是常見客訴原因。(來源：P.4)"
+        },
+        {
+            id: 2,
+            tag: "服務架構",
+            question: "本行家族辦公室打造的「1+2+FO+N+N」服務團隊，其中的「1+2」指的是？",
+            options: [
+                "A. 1 位分行經理 + 2 位理專",
+                "B. 1 位會計師 + 2 位律師",
+                "C. 1 位專屬客戶理專 + 2 位投資/保險客戶關係經理",
+                "D. 1 位家族成員 + 2 位繼承人"
+            ],
+            answer: "C",
+            note: "解析：「1」是專屬客戶理專，「2」是投資/保險客戶關係經理，結合後端的 FO 團隊與內外部專家。(來源：P.6)"
+        },
+        {
+            id: 3,
+            tag: "不動產服務",
+            question: "雖然高資產客戶「資格認定」不含不動產，但家族辦公室是否提供不動產相關服務？",
+            options: [
+                "A. 完全不提供，因為不算在 AUM 裡",
+                "B. 僅提供房屋貸款服務",
+                "C. 有，提供不動產傳承規劃、稅務諮詢及資產活化（如老屋重建、共有地處理）",
+                "D. 僅提供海外不動產買賣"
+            ],
+            answer: "C",
+            note: "解析：這是同仁常混淆的點。資格認定「排除」不動產，但家族辦公室的服務「包含」不動產稅務規劃與活化，協助客戶解決「多屋族」或「共有」問題。(來源：P.47, P.48)"
+        },
+        {
+            id: 4,
+            tag: "企業主客群",
+            question: "針對「企業主」客群，家族辦公室能解決的痛點不包含下列何者？",
+            options: [
+                "A. 股權高度集中 (>50%) 的傳承規劃",
+                "B. 未上市櫃股票出售的稅負試算",
+                "C. 協助企業進行惡意併購",
+                "D. 家族成員分散於不同國家（CFC/CRS 稅務風險）"
+            ],
+            answer: "C",
+            note: "解析：服務重點在於「股權接班」、「稅務規劃」與「資產整合」，不包含協助進行惡意併購。(來源：P.51, P.52)"
+        },
+        {
+            id: 5,
+            tag: "信託服務",
+            question: "家族辦公室推廣「信託」作為傳承平台，其對於高齡者的核心價值主張為何？",
+            options: [
+                "A. 追求最高投資報酬率",
+                "B. 「安養」以「息」養老；「傳承」以「本」傳承",
+                "C. 規避所有遺產稅",
+                "D. 將資產完全捐贈給慈善機構"
+            ],
+            answer: "B",
+            note: "解析：信託業務核心價值為「確保資產穩健增長與世代傳承」，透過孳息養老、本金傳承，達到守護未來的目的。(來源：P.54, P.55)"
+        },
+        {
+            id: 6,
+            tag: "服務流程",
+            question: "遠銀家族辦公室的五步驟服務流程，第一步是什麽？",
+            options: [
+                "A. 產品銷售",
+                "B. 需求梳理（詳盡了解家族需求、成員及傳承系統）",
+                "C. 簽署合約",
+                "D. 資產檢視"
+            ],
+            answer: "B",
+            note: "解析：正確流程為：1.需求梳理 -> 2.資產檢視 -> 3.策略評估 -> 4.解決方案 -> 5.定期檢視。(來源：P.4)"
+        },
+        {
+            id: 7,
+            tag: "資格覆審",
+            question: "為符合法規，高資產客戶的「資格覆審」頻率為何？（請務必告知客戶）",
+            options: [
+                "A. 終身有效，無需覆審",
+                "B. 每年一次",
+                "C. 每兩年辦理一次覆審作業，並每年定期評估資產價值",
+                "D. 每五年一次"
+            ],
+            answer: "C",
+            note: "解析：依規定，每兩年進行一次資格覆審，每年進行資產價值檢視。若未配合審查將暫停新業務。(來源：P.5)"
+        },
+        {
+            id: 8,
+            tag: "服務廣度",
+            question: "家族辦公室強調「人、財、地」三面向交錯的構面，其中「地」指的是？",
+            options: [
+                "A. 投資地產股",
+                "B. 購買農地",
+                "C. 資產配置國家、跨國稅法適用與地政相關問題",
+                "D. 公司的地理位置"
+            ],
+            answer: "C",
+            note: "解析：「地」涵蓋資產配置的國家風險、配合家族成員與企業營運地點的跨國稅法適用。(來源：P.5)"
+        },
+        {
+            id: 9,
+            tag: "稅務規劃",
+            question: "針對個人稅務諮詢，家族辦公室結合外部會計師，主要協助客戶檢視哪些項目？",
+            options: [
+                "A. 僅申報綜合所得稅",
+                "B. 跨境租稅諮詢規劃、個人財產移動調度、遺產贈與稅務試算",
+                "C. 協助逃漏稅",
+                "D. 僅處理薪資所得"
+            ],
+            answer: "B",
+            note: "解析：包含個人境內外資金匯回、雙重國籍稅務、以及遺產贈與稅務規劃。(來源：P.44)"
+        },
+        {
+            id: 10,
+            tag: "專業評估",
+            question: "若客戶資產達標，但未通過「專業知識問卷」（低於 8 分），可以成為高資產客戶嗎？",
+            options: [
+                "A. 可以，只要有錢就行",
+                "B. 不行，需同時具備金融商品專業知識（8分以上）與交易經驗",
+                "C. 可以，理專幫忙寫就好",
+                "D. 可以，簽切結書即可"
+            ],
+            answer: "B",
+            note: "解析：準入條件包含：財力證明 + 專業評估（問卷 8 分以上 & 交易經驗）。缺一不可。(來源：P.4)"
+        },
+        {
+            id: 11,
+            tag: "外部專家",
+            question: "本行家族辦公室的「外部專家 (External Experts)」主要包含哪些專業人士？",
+            options: [
+                "A. 僅有保險業務員",
+                "B. 律師事務所、會計師事務所（協助法律諮詢、稅務申報、股權重估等）",
+                "C. 投顧老師",
+                "D. 房仲業者"
+            ],
+            answer: "B",
+            note: "解析：本行整合外部律師與會計師，提供法律意見、稅務申報、股權架構調整等高度專業服務。(來源：P.6, P.50)"
+        },
+        {
+            id: 12,
+            tag: "目標客群",
+            question: "關於「多屋族」客戶，家族辦公室主要鎖定哪類需求進行切入？",
+            options: [
+                "A. 想炒房的客戶",
+                "B. 不動產價值不一需傳承規劃、現金不足需活化之客戶",
+                "C. 剛出社會的首購族",
+                "D. 只需要一般房貸的客戶"
+            ],
+            answer: "B",
+            note: "解析：目標鎖定：不動產價值不一導致分配困難、現金不足繳稅需活化、或有稅務規劃需求者。(來源：P.49)"
+        },
+        {
+            id: 13,
+            tag: "推廣策略",
+            question: "同仁在推廣家族辦公室服務時，最好的「借力」方式是？",
+            options: [
+                "A. 自己當專家，回答所有稅務法律問題",
+                "B. 扮演資源整合者，釐清需求後對接 FO 團隊與專家，提供 Total Solution",
+                "C. 僅銷售單一保險商品，不談其他",
+                "D. 請客戶自己去找律師"
+            ],
+            answer: "B",
+            note: "解析：同仁應從「產品銷售」轉型為「高端財管顧問」，運用 FO 團隊資源提供全方位解決方案。(來源：P.38)"
+        },
+        {
+            id: 14,
+            tag: "核心價值",
+            question: "遠銀財管 2.0 家族辦公室希望為客戶打造的人生價值旅程，不包含下列何者？",
+            options: [
+                "A. Wealth (財富)",
+                "B. Well-being (幸福)",
+                "C. Welfare (社會關懷)",
+                "D. Worry (擔憂)"
+            ],
+            answer: "D",
+            note: "解析：三大核心價值為：Wealth (財富)、Well-being (幸福)、Welfare (社會關懷)。(來源：P.1)"
+        },
+        {
+            id: 15,
+            tag: "交易經驗",
+            question: "關於高資產客戶的「交易經驗」認定，下列何者符合標準？",
+            options: [
+                "A. 近 2 年內僅定存交易",
+                "B. 近 2 年內申購或轉換金融商品達 10 次以上（且有 2 種以上不同商品）",
+                "C. 僅持有股票 1 個月",
+                "D. 完全無投資經驗"
+            ],
+            answer: "B",
+            note: "解析：交易經驗認定三選一：(1)近2年10次且2種商品 (2)結構/衍生性商品持有6個月 (3)結構/衍生性商品持有至到期。(來源：P.4)"
+        }
+    ];
+
+    let currentQuestions = [];
+
+    // 初始化測驗
+    function initQuiz() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = ''; 
+        document.getElementById('result-area').style.display = 'none';
+        document.querySelector('.submit-btn').style.display = 'block';
+
+        // 隨機洗牌並取前 10 題
+        const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+        currentQuestions = shuffled.slice(0, 10);
+
+        // 生成題目 HTML
+        currentQuestions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${index}`;
+            
+            let optionsHtml = '';
+            q.options.forEach(opt => {
+                const val = opt.substring(0, 1);
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="q${index}" value="${val}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="q-tag">#${q.tag}</div>
+                <div class="q-title">Q${index + 1}. ${q.question}</div>
+                <div class="options">${optionsHtml}</div>
+                <div class="explanation" id="expl-${index}">${q.note}</div>
+            `;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    // 提交並計算成績
+    function submitQuiz() {
+        let score = 0;
+        let unanswered = false;
+        
+        // 檢查是否全部作答
+        for (let i = 0; i < 10; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) {
+                unanswered = true;
+                document.getElementById(`card-${i}`).style.border = "2px solid #dc3545";
+            } else {
+                document.getElementById(`card-${i}`).style.border = "1px solid #ddd";
+            }
+        }
+
+        if (unanswered) {
+            alert("尚有題目未作答，請完成後再提交！");
+            return;
+        }
+
+        // 計分與顯示解析
+        currentQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`).value;
+            const explDiv = document.getElementById(`expl-${index}`);
+            const cardDiv = document.getElementById(`card-${index}`);
+            
+            explDiv.style.display = 'block';
+
+            if (selected === q.answer) {
+                score += 10; // 每題 10 分
+                explDiv.innerHTML = `<span class="correct-text">✅ 正確！</span> ` + explDiv.innerHTML;
+                cardDiv.style.borderLeft = "6px solid #28a745";
+            } else {
+                explDiv.innerHTML = `<span class="wrong-text">❌ 錯誤（正確答案：${q.answer}）</span><br>` + explDiv.innerHTML;
+                cardDiv.style.borderLeft = "6px solid #dc3545";
+                cardDiv.style.backgroundColor = "#fff5f5";
+            }
+        });
+
+        // 顯示結果
+        const resultArea = document.getElementById('result-area');
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.style.display = 'none';
+        resultArea.style.display = 'block';
+
+        // 及格門檻：90分
+        if (score >= 90) {
+            resultArea.className = 'pass';
+            resultArea.innerHTML = `
+                <div class="score-display">得分：${score} 分</div>
+                <h3>🎉 恭喜通過北一區認證！</h3>
+                <p>您已精確掌握家族辦公室服務內涵，請善用「1+2+FO+N+N」團隊資源協助客戶。</p>
+                <div class="retry-btn" onclick="initQuiz()">再次練習</div>
+            `;
+        } else {
+            resultArea.className = 'fail';
+            resultArea.innerHTML = `
+                <div class="score-display">得分：${score} 分</div>
+                <h3>⚠️ 未達標準（需 90 分及格）</h3>
+                <p>為避免客訴風險，請務必重新檢視解析，釐清「資產認定」與「服務範圍」的差異。</p>
+                <div class="retry-btn" onclick="initQuiz()">重新測驗</div>
+            `;
+        }
+
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 啟動
+    window.onload = initQuiz;
+</script>
+
+</body>
+</html>

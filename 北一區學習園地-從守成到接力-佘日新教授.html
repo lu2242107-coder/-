@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北一區學習園地：家族企業永續經營的啟承轉合</title>
+<style>
+    body {
+        font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+        background-color: #f4f7f6;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-top: 6px solid #b22222; /* 遠銀紅 */
+    }
+    header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    h1 {
+        color: #b22222;
+        margin: 0 0 10px 0;
+        font-size: 1.6em;
+    }
+    .subtitle {
+        color: #555;
+        font-size: 1em;
+        font-weight: bold;
+    }
+    .lecturer {
+        color: #888;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    .alert-box {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+        padding: 15px;
+        border-radius: 6px;
+        border-left: 5px solid #2196f3;
+        margin-bottom: 25px;
+        font-size: 0.95em;
+    }
+    .question-card {
+        background: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        position: relative;
+    }
+    .q-title {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+    .options label {
+        display: block;
+        padding: 12px 15px;
+        margin: 8px 0;
+        background: #f9f9f9;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+    }
+    .options label:hover {
+        background: #f0f0f0;
+        border-color: #ccc;
+    }
+    input[type="radio"] {
+        margin-right: 12px;
+        transform: scale(1.2);
+    }
+    button.submit-btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: #b22222;
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 6px rgba(178, 34, 34, 0.3);
+    }
+    button.submit-btn:hover {
+        background-color: #900000;
+    }
+    
+    /* 結果區域 */
+    #result-area {
+        display: none;
+        margin-top: 30px;
+        padding: 30px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .pass {
+        background-color: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+    }
+    .fail {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+    }
+    .score-display {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+    
+    /* 解析樣式 */
+    .explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        font-size: 0.9em;
+        color: #555;
+        display: none;
+    }
+    .correct-text { color: #28a745; font-weight: bold; }
+    .wrong-text { color: #dc3545; font-weight: bold; }
+    
+    .retry-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 30px;
+        background-color: #555;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>北一區學習園地</h1>
+        <div class="subtitle">家族企業永續經營的啟承轉合</div>
+        <div class="lecturer">講師：佘日新 教授</div>
+    </header>
+
+    <div class="alert-box">
+        <strong>📚 測驗說明：</strong>
+        <ul>
+            <li>本測驗旨在強化同仁對「家族傳承」與「家族辦公室」服務的認知。</li>
+            <li>系統將從題庫隨機抽取 10 題。</li>
+            <li><strong>及格標準：90 分</strong>（即 10 題中僅容許錯 1 題）。</li>
+        </ul>
+    </div>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <!-- 題目由 JS 生成 -->
+        </div>
+        <button type="button" class="submit-btn" onclick="submitQuiz()">提交測驗</button>
+    </form>
+
+    <div id="result-area"></div>
+</div>
+
+<script>
+    // 題庫資料 (依據來源 [1]-[2] 編制)
+    const questionBank = [
+        {
+            id: 1,
+            question: "根據范博宏教授對華人上市公司的研究，家族企業若傳承不好，接班前後五年的股價平均會下跌多少？",
+            options: [
+                "A. 10%",
+                "B. 30%",
+                "C. 56%",
+                "D. 80%"
+            ],
+            answer: "C",
+            note: "解析：根據教材數據，倘若傳承不好，公司股價五年間下跌 56%，權力移交後績效 2.9%。(參見講義 P.20)"
+        },
+        {
+            id: 2,
+            question: "在家族企業傳承的「三環動態模型」中，不包含下列哪一個環節？",
+            options: [
+                "A. 家族成員 (Family)",
+                "B. 所有權人 (Ownership)",
+                "C. 企業經營者 (Management)",
+                "D. 政府監管 (Government)"
+            ],
+            answer: "D",
+            note: "解析：三環模型由「家族成員、所有權人、企業經營者」組成，不同重疊區域代表不同角色。(參見講義 P.21)"
+        },
+        {
+            id: 3,
+            question: "關於李錦記家族的傳承理念，下列何者正確？",
+            options: [
+                "A. 守成至上，不隨意改變祖宗規矩",
+                "B. 在李錦記，沒有守業，只有不斷創業",
+                "C. 僅關注利潤，不談家族憲法",
+                "D. 嚴格禁止家族成員進入董事會"
+            ],
+            answer: "B",
+            note: "解析：李錦記家族樹狀圖強調：「在李錦記，沒有守業，只有不斷創業！」(參見講義 P.24)"
+        },
+        {
+            id: 4,
+            question: "佘日新教授提出的「啟、承、轉、合」中，關於「啟」的定義為何？",
+            options: [
+                "A. 單純的啟動專案",
+                "B. 從交易到共創，讓家族企業迎向永續新局",
+                "C. 啟動破產保護程序",
+                "D. 僅指第二代進入公司"
+            ],
+            answer: "B",
+            note: "解析：「啟」代表「從交易到共創」，讓家族企業迎向永續新局。(參見講義 P.35)"
+        },
+        {
+            id: 5,
+            question: "在本行「家族辦公室」的服務架構中，主要扮演什麼角色？",
+            options: [
+                "A. 僅提供一般存款服務",
+                "B. 您的家族專屬智庫，協助個人及家族財富保值與增值",
+                "C. 只負責舉辦聯誼活動",
+                "D. 僅銷售單一保險商品"
+            ],
+            answer: "B",
+            note: "解析：遠銀家族辦公室定位為「您的家族專屬智庫」，結合內外部資源提供全方位規劃。(參見講義 P.36)"
+        },
+        {
+            id: 6,
+            question: "下列何者「不屬於」本行家族辦公室提供的六大專家解方領域？",
+            options: [
+                "A. 資產規劃與遺產規畫",
+                "B. 稅務分析 (CRS, CFC)",
+                "C. 不動產產權登記與活化",
+                "D. 企業人力資源招募"
+            ],
+            answer: "D",
+            note: "解析：六大領域包含：資產規劃師、稅務分析家、家族資產會計師、金錢信託、保險金信託、不動產稅務。(參見講義 P.28)"
+        },
+        {
+            id: 7,
+            question: "在「三環動態」中，若家族成員擁有股權但「不負責任企業經營」，其心態通常傾向為何？",
+            options: [
+                "A. 期待關愛",
+                "B. 期待專業化",
+                "C. 關注分紅 (Waiting for dividends)",
+                "D. 承受各方壓力"
+            ],
+            answer: "C",
+            note: "解析：擁有股權但非經營者的家族成員，通常關注業績並「期待分紅」。(參見講義 P.21)"
+        },
+        {
+            id: 8,
+            question: "佘教授提到「承－產業知識與智慧資本的移轉」，除了財務資本外，還強調詢問 AI 什麼問題？",
+            options: [
+                "A. 股價會漲多少？",
+                "B. 企業上一代的「關係資本本能」夠傳承嗎？",
+                "C. 哪個國家稅率最低？",
+                "D. 如何裁員最快？"
+            ],
+            answer: "B",
+            note: "解析：講義強調「金融的本質是關係」，需詢問 AI 企業上一代的關係資本本能是否足夠傳承。(參見講義 P.22)"
+        },
+        {
+            id: 9,
+            question: "針對「轉－商業模式全面融合」，講義中提到了哪個世代趨勢的轉變？",
+            options: [
+                "A. 從嬰兒潮世代將把大量財富轉移給 Z 世代",
+                "B. 財富將集中在老年人手中不流動",
+                "C. 房地產將完全取代數位資產",
+                "D. 資本主義將消失"
+            ],
+            answer: "A",
+            note: "解析：未來幾年內，嬰兒潮世代將把大量財富 (100兆美元) 轉移給 Z 世代。(參見講義 P.25)"
+        },
+        {
+            id: 10,
+            question: "本行推廣的「創世代」知識網頁，其核心價值主張為何？",
+            options: [
+                "A. 知識創見，接班智庫",
+                "B. 低價競爭，搶佔市場",
+                "C. 放棄傳承，直接出售",
+                "D. 僅提供股市明牌"
+            ],
+            answer: "A",
+            note: "解析：「創世代・新力量」網頁提供知識典藏與接班智庫，包含 Family, Firm, Fortune 等面向。(參見講義 P.29, P.31)"
+        },
+        {
+            id: 11,
+            question: "關於「合－共金實整合的新世界」，講義強調金融的本質是什麼？",
+            options: [
+                "A. 金錢",
+                "B. 關係 (Relationship)",
+                "C. 數據",
+                "D. 運氣"
+            ],
+            answer: "B",
+            note: "解析：講義大標題明確指出：「金融的本質是關係」。(參見講義 P.26)"
+        },
+        {
+            id: 12,
+            question: "關於「八星等禮遇－典藏套組」的用途，下列何者正確？",
+            options: [
+                "A. 僅作為客戶的生日禮物",
+                "B. 協助同仁在推廣時有具體的「知識創見」與「服務」展示工具",
+                "C. 用於折抵手續費",
+                "D. 讓客戶拿去轉賣"
+            ],
+            answer: "B",
+            note: "解析：典藏套組（包含知識網頁 QR Code）是為了讓同仁在接觸客戶時，能展現本行在家族傳承議題上的深度與專業。(參見講義 P.23)"
+        },
+        {
+            id: 13,
+            question: "佘教授對於「承」的詮釋，下列何者正確？",
+            options: [
+                "A. 傳承是終點",
+                "B. 傳承不是終點，而是共創的起點",
+                "C. 只要把錢分完就算傳承",
+                "D. 傳承通常會導致失敗"
+            ],
+            answer: "B",
+            note: "解析：「承」的關鍵語為：傳承不是終點，而是共創的起點。(參見講義 P.35)"
+        },
+        {
+            id: 14,
+            question: "講義案例中，接班 20 年的 37 歲二代，致力於將什麼技術注入傳產？",
+            options: [
+                "A. AI (人工智慧) 結合低碳",
+                "B. 區塊鏈",
+                "C. 元宇宙",
+                "D. 無人機配送"
+            ],
+            answer: "A",
+            note: "解析：案例為「子承父業」，37歲瑞儀二代接班，注入金融魂，布局AI結合低碳。(參見講義 P.32)"
+        },
+        {
+            id: 15,
+            question: "面對家族企業客戶，同仁應如何運用「家族辦公室」資源避免客訴？",
+            options: [
+                "A. 隨意承諾客戶不切實際的報酬率",
+                "B. 藉由「智庫」角色，釐清客戶在資產、稅務、傳承上的真實需求，提供專業對接",
+                "C. 告訴客戶我們什麼都能做，不用轉介專家",
+                "D. 請客戶自己上網查資料"
+            ],
+            answer: "B",
+            note: "解析：家族辦公室整合了內外部專家（律師、會計師等），同仁應扮演橋樑，利用專業團隊解決複雜問題，而非單打獨鬥造成錯誤建議。(參見講義 P.28, P.36)"
+        }
+    ];
+
+    let currentQuestions = [];
+
+    // 初始化測驗
+    function initQuiz() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = ''; 
+        document.getElementById('result-area').style.display = 'none';
+        document.querySelector('.submit-btn').style.display = 'block';
+
+        // 洗牌並取前10題
+        const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+        currentQuestions = shuffled.slice(0, 10);
+
+        // 生成題目HTML
+        currentQuestions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${index}`;
+            
+            let optionsHtml = '';
+            q.options.forEach(opt => {
+                const val = opt.substring(0, 1);
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="q${index}" value="${val}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="q-title">Q${index + 1}. ${q.question}</div>
+                <div class="options">${optionsHtml}</div>
+                <div class="explanation" id="expl-${index}">${q.note}</div>
+            `;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    // 提交並計算成績
+    function submitQuiz() {
+        let score = 0;
+        let unanswered = false;
+        
+        // 檢查是否全部作答
+        for (let i = 0; i < 10; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) {
+                unanswered = true;
+                document.getElementById(`card-${i}`).style.border = "2px solid #dc3545";
+            } else {
+                document.getElementById(`card-${i}`).style.border = "1px solid #e0e0e0";
+            }
+        }
+
+        if (unanswered) {
+            alert("尚有題目未作答，請完成後再提交！");
+            return;
+        }
+
+        // 計分邏輯
+        currentQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`).value;
+            const explDiv = document.getElementById(`expl-${index}`);
+            const cardDiv = document.getElementById(`card-${index}`);
+            
+            explDiv.style.display = 'block';
+
+            if (selected === q.answer) {
+                score += 10; // 每題10分
+                explDiv.innerHTML = `<span class="correct-text">✅ 正確！</span> ` + explDiv.innerHTML;
+                cardDiv.style.borderLeft = "5px solid #28a745";
+            } else {
+                explDiv.innerHTML = `<span class="wrong-text">❌ 錯誤！正確答案是 ${q.answer}。</span><br>` + explDiv.innerHTML;
+                cardDiv.style.borderLeft = "5px solid #dc3545";
+                cardDiv.style.backgroundColor = "#fff5f5";
+            }
+        });
+
+        // 顯示結果
+        const resultArea = document.getElementById('result-area');
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.style.display = 'none';
+        resultArea.style.display = 'block';
+
+        // 及格門檻：90分
+        if (score >= 90) {
+            resultArea.className = 'pass';
+            resultArea.innerHTML = `
+                <div class="score-display">得分：${score} 分</div>
+                <h3>🎉 恭喜通過認證！</h3>
+                <p>您已具備家族企業傳承的專業認知，請善用「家族辦公室」資源協助客戶。</p>
+                <div class="retry-btn" onclick="initQuiz()">再次練習</div>
+            `;
+        } else {
+            resultArea.className = 'fail';
+            resultArea.innerHTML = `
+                <div class="score-display">得分：${score} 分</div>
+                <h3>⚠️ 未達標準（需 90 分及格）</h3>
+                <p>請詳閱下方解析，強化對「啟承轉合」與「家族智庫」的理解，避免服務落差。</p>
+                <div class="retry-btn" onclick="initQuiz()">重新測驗</div>
+            `;
+        }
+
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 啟動
+    window.onload = initQuiz;
+</script>
+
+</body>
+</html>

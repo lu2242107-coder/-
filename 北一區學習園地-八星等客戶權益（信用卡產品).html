@@ -1,0 +1,538 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北一區學習園地：八星等權益(信用卡優惠)認證</title>
+<style>
+    :root {
+        --primary-red: #b22222; /* 遠銀紅 */
+        --bg-color: #f4f6f8;
+        --card-bg: #ffffff;
+        --text-color: #333;
+        --border-radius: 12px;
+    }
+
+    body {
+        font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-top: 6px solid var(--primary-red);
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    h1 {
+        color: var(--primary-red);
+        margin: 0 0 10px 0;
+        font-size: 1.8em;
+    }
+
+    .subtitle {
+        color: #555;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .alert-box {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 5px solid #2196f3;
+        margin-bottom: 25px;
+        font-size: 0.95em;
+    }
+
+    .question-card {
+        background: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+
+    .q-tag {
+        display: inline-block;
+        font-size: 0.85em;
+        background-color: #f0f0f0;
+        color: #555;
+        padding: 3px 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .q-title {
+        font-weight: bold;
+        font-size: 1.15em;
+        margin-bottom: 15px;
+        color: #2c3e50;
+    }
+
+    .options label {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 15px;
+        margin: 8px 0;
+        background: #f9f9f9;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .options label:hover {
+        background: #eef2f5;
+        border-color: #ccc;
+    }
+
+    input[type="radio"] {
+        margin-right: 12px;
+        margin-top: 5px;
+        transform: scale(1.2);
+        flex-shrink: 0;
+    }
+
+    button.submit-btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background-color: var(--primary-red);
+        color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 30px;
+        box-shadow: 0 4px 6px rgba(178, 34, 34, 0.3);
+    }
+
+    button.submit-btn:hover {
+        background-color: #900000;
+    }
+
+    /* 解析與結果區 */
+    .explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #fff;
+        border-left: 4px solid #6c757d;
+        font-size: 0.95em;
+        color: #444;
+        display: none;
+    }
+
+    .correct-text { color: #28a745; font-weight: bold; }
+    .wrong-text { color: #dc3545; font-weight: bold; }
+
+    #result-area {
+        display: none;
+        text-align: center;
+        margin-top: 30px;
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    .pass {
+        background-color: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+    }
+
+    .fail {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+    }
+
+    .score-display {
+        font-size: 3em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+
+    .retry-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 35px;
+        background-color: #555;
+        color: white;
+        border-radius: 50px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>北一區學習園地</h1>
+        <div class="subtitle">八星等權益：信用卡優惠權益認證</div>
+    </header>
+
+    <div class="alert-box">
+        <strong>⚠️ 測驗重點（銷售與競品分析）：</strong>
+        <ul>
+            <li>目的：熟悉「遠東頂級快樂卡」與同業（星展、台新、永豐）之差異優勢。</li>
+            <li>規則：題庫隨機抽出 10 題，選項順序隨機。</li>
+            <li><strong>及格標準：90 分</strong>（需精準掌握權益數據）。</li>
+        </ul>
+    </div>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            <!-- 題目由 JS 動態生成 -->
+        </div>
+        <button type="button" class="submit-btn" onclick="submitQuiz()">提交測驗</button>
+    </form>
+
+    <div id="result-area"></div>
+</div>
+
+<script>
+    // 題庫資料 (依據來源資料編制，特別著重競品 PK 與 2026 加碼)
+    const questionBank = [
+        {
+            id: 1,
+            tag: "同業 PK - 機場接送",
+            question: "在「高端卡 PK」中，遠東頂級快樂卡的「機場接送」權益，相較於星展、台新、永豐等同級卡片，最大的獨家優勢為何？",
+            options: [
+                "全年「不限次數」免費接送 (單筆滿額即享)",
+                "每年僅限 2 次",
+                "每年僅限 4 次",
+                "完全不需消費門檻"
+            ],
+            answer: "全年「不限次數」免費接送 (單筆滿額即享)",
+            note: "解析：勝！競品多限制每年 2~12 次，遠銀提供符合門檻(單筆團費/機票2萬)即享「不限次數」接送，這是在銷售時最強的差異化亮點。(來源：[3] PK表)"
+        },
+        {
+            id: 2,
+            tag: "同業 PK - 市區停車",
+            question: "關於「市區免費停車」門檻，遠東頂級快樂卡相較於競品（需前期刷滿 1~1.2 萬）的優勢為何？",
+            options: [
+                "當月不限金額消費 1 筆，次月即享每日 2 小時免費",
+                "當月需消費滿 5,000 元",
+                "完全無消費門檻",
+                "每日僅限 1 小時"
+            ],
+            answer: "當月不限金額消費 1 筆，次月即享每日 2 小時免費",
+            note: "解析：勝！門檻最低。競品通常要求前期帳單滿額(1萬~2萬)，遠銀僅需「不限金額刷 1 筆」即可享次月每日 2 小時免費。(來源：[5], [3])"
+        },
+        {
+            id: 3,
+            tag: "2026 新戶首刷",
+            question: "2026 年新戶申辦遠東頂級快樂卡，核卡後 60 天內刷滿 1 萬元，可獲得什麼加碼回饋？",
+            options: [
+                "遠東 SOGO 禮券 2,000 元",
+                "HAPPY GO 點數 500 點",
+                "刷卡金 500 元",
+                "行李箱一個"
+            ],
+            answer: "遠東 SOGO 禮券 2,000 元",
+            note: "解析：2026/1/1~6/30 新戶首刷加碼：核卡 60 天內一般消費滿 1 萬元，即贈 SOGO 禮券 2,000 元。(來源：[4])"
+        },
+        {
+            id: 4,
+            tag: "海外回饋",
+            question: "遠東頂級快樂卡的「海外刷卡回饋」最高可達多少？",
+            options: [
+                "4.5% (基本1.5% + 海外月刷滿額2% + 指定國家1%)",
+                "3%",
+                "2%",
+                "1.5%"
+            ],
+            answer: "4.5% (基本1.5% + 海外月刷滿額2% + 指定國家1%)",
+            note: "解析：基本 1.5% 無上限 + 海外月刷滿額加碼 2% + 指定國家(日韓星港美) 1% = 最高 4.5%。(來源：[6])"
+        },
+        {
+            id: 5,
+            tag: "美食饗宴",
+            question: "在台北遠東香格里拉飯店用餐，頂級快樂卡提供「遠東 Café 自助餐廳」什麼優惠？",
+            options: [
+                "2 人以上同行，1 人免費 (買一送一概念)",
+                "全面 9 折",
+                "全面 85 折",
+                "4 人同行 1 人免費"
+            ],
+            answer: "2 人以上同行，1 人免費 (買一送一概念)",
+            note: "解析：這是極具吸引力的權益：遠東 Café 自助餐廳「2 人以上同行 1 人免費」。全館其他餐廳則為 75 折起。(來源：[7], [5])"
+        },
+        {
+            id: 6,
+            tag: "百貨權益",
+            question: "持遠東頂級快樂卡至「遠東 SOGO 百貨」，享有什麼停車優惠？",
+            options: [
+                "每日過卡免費 4 小時 (不限金額)",
+                "需消費滿 500 元才免費 1 小時",
+                "每日免費 1 小時",
+                "完全無停車優惠"
+            ],
+            answer: "每日過卡免費 4 小時 (不限金額)",
+            note: "解析：館內停車優惠極強：遠東 SOGO 館內不限金額過卡即享「免費 4 小時」。(來源：[8])"
+        },
+        {
+            id: 7,
+            tag: "年費與首刷",
+            question: "遠東頂級快樂卡的年費為 NT$24,000，但新戶首刷禮（刷 1 筆）會贈送什麼來平衡價值？",
+            options: [
+                "HAPPY GO 點數 10,000 點",
+                "刷卡金 1,000 元",
+                "便利商店禮券 100 元",
+                "沒有任何首刷禮"
+            ],
+            answer: "HAPPY GO 點數 10,000 點",
+            note: "解析：繳交年費並任刷一筆，贈送 HAPPY GO 1 萬點。(來源：[3] PK表)"
+        },
+        {
+            id: 8,
+            tag: "機場接送門檻",
+            question: "雖然遠東頂級快樂卡提供「無限次」機場接送，但其單筆消費門檻為多少？",
+            options: [
+                "機票或團費單筆滿 NT$20,000",
+                "機票或團費單筆滿 NT$10,000",
+                "機票或團費單筆滿 NT$30,000",
+                "無金額限制"
+            ],
+            answer: "機票或團費單筆滿 NT$20,000",
+            note: "解析：需注意門檻為單筆滿 2 萬元。雖然門檻較部分競品(1萬-1.5萬)稍高，但優勢在於「次數無上限」。(來源：[6], [3])"
+        },
+        {
+            id: 9,
+            tag: "生活禮遇",
+            question: "透過「每卡無條件每月致電肯驛」預約，可享有哪些項目的「買一送一」或優惠價？",
+            options: [
+                "全台高爾夫球、熱門飯店住宿、人氣自助餐",
+                "僅限電影票",
+                "僅限高鐵票",
+                "僅限機場接送"
+            ],
+            answer: "全台高爾夫球、熱門飯店住宿、人氣自助餐",
+            note: "解析：每月可預約全台高爾夫球、飯店住宿、餐廳優惠價各 1 次（限量）。(來源：[7], [9])"
+        },
+        {
+            id: 10,
+            tag: "尊榮服務",
+            question: "針對 8 星等客戶，進線客服的「快速通關」代碼順序為何？",
+            options: [
+                "撥打 8073-1166 -> 按 1 -> 輸入 ID -> 轉接專人",
+                "撥打 0800 -> 按 9 -> 等待",
+                "只能臨櫃辦理",
+                "需先寫信預約"
+            ],
+            answer: "撥打 8073-1166 -> 按 1 -> 輸入 ID -> 轉接專人",
+            note: "解析：專線 8073-1166，識別 8 星等身分後優先接聽。(來源：[10])"
+        },
+        {
+            id: 11,
+            tag: "辦卡效率",
+            question: "8 星等客戶透過「綠色通道」辦卡，其核卡與製卡時效約為多久？",
+            options: [
+                "當日或隔日審結 (T+1)，製卡 T+2 (極速發卡)",
+                "需等待 2 週",
+                "需等待 1 個月",
+                "與一般件相同，約 7 個工作天"
+            ],
+            answer: "當日或隔日審結 (T+1)，製卡 T+2 (極速發卡)",
+            note: "解析：8 星等享優先處理：徵審優先核准 (T/T+1)，製卡 (T+2)，大幅縮短等待期。(來源：[11])"
+        },
+        {
+            id: 12,
+            tag: "滿額回饋",
+            question: "「滿額再贈刷卡金」活動中，若核卡後次月底前累積消費滿 150 萬元，最高可獲贈多少禮券/刷卡金？",
+            options: [
+                "刷卡金 8,000 元 + 額外加碼 (1.2萬/2.4萬)",
+                "僅贈 1,000 元",
+                "贈送吸塵器",
+                "無回饋"
+            ],
+            answer: "刷卡金 8,000 元 + 額外加碼 (1.2萬/2.4萬)",
+            note: "解析：滿 150 萬贈 8,000 元，8 星等客戶另有專屬加碼 (總計最高 2.4 萬)。(來源：[12])"
+        },
+        {
+            id: 13,
+            tag: "貴賓室",
+            question: "遠東頂級快樂卡提供的機場貴賓室服務為？",
+            options: [
+                "龍騰卡 (DragonPass) / Priority Pass，不限金額、全年不限次數",
+                "每年限 2 次",
+                "需付費使用",
+                "僅限桃園機場"
+            ],
+            answer: "龍騰卡 (DragonPass) / Priority Pass，不限金額、全年不限次數",
+            note: "解析：勝！提供 PP 或龍騰卡，且「不限金額、全年不限次數」，優於競品。(來源：[6], [3])"
+        },
+        {
+            id: 14,
+            tag: "申請書填寫",
+            question: "8 星等客戶填寫信用卡申請書時，關於「年收入」欄位可如何填寫以加速流程？",
+            options: [
+                "可勾選「本行 AUM 達 5 仟萬/8 星等專案」",
+                "必須附上國稅局所得清單",
+                "必須附上薪資轉帳證明",
+                "可以空白不填"
+            ],
+            answer: "可勾選「本行 AUM 達 5 仟萬/8 星等專案」",
+            note: "解析：可勾選特定選項 (AUM 金額或 8 星等專案)，避免因年收填寫過低導致額度不符預期。(來源：[13])"
+        },
+        {
+            id: 15,
+            tag: "住宿優惠",
+            question: "在「遠東香格里拉飯店」住宿，頂級快樂卡提供何種專屬禮遇？",
+            options: [
+                "電話訂房享專享價再 9 折 + 視房況升等",
+                "住一晚送一晚",
+                "免費住宿",
+                "無優惠"
+            ],
+            answer: "電話訂房享專享價再 9 折 + 視房況升等",
+            note: "解析：提供電話訂房專享價再 9 折，以及升等、保留餐廳座位的禮遇。(來源：[5])"
+        }
+    ];
+
+    // 洗牌演算法
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    let currentQuestions = [];
+
+    // 初始化測驗
+    function initQuiz() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = '';
+        document.getElementById('result-area').style.display = 'none';
+        document.querySelector('.submit-btn').style.display = 'block';
+
+        // 1. 隨機選出 10 題
+        const shuffledQuestions = shuffleArray([...questionBank]);
+        currentQuestions = shuffledQuestions.slice(0, 10);
+
+        // 2. 生成 HTML
+        currentQuestions.forEach((q, index) => {
+            // 複製選項並隨機打亂
+            let shuffledOptions = shuffleArray([...q.options]);
+
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${index}`;
+
+            // 生成選項 HTML
+            let optionsHtml = '';
+            shuffledOptions.forEach((opt) => {
+                optionsHtml += `
+                    <label>
+                        <input type="radio" name="q${index}" value="${opt}">
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="q-tag">#${q.tag}</div>
+                <div class="q-title">Q${index + 1}. ${q.question}</div>
+                <div class="options">${optionsHtml}</div>
+                <div class="explanation" id="expl-${index}">${q.note}</div>
+            `;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    // 提交邏輯
+    function submitQuiz() {
+        let score = 0;
+        let unanswered = false;
+        
+        // 檢查未作答
+        for (let i = 0; i < 10; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if (!selected) {
+                unanswered = true;
+                document.getElementById(`card-${i}`).style.border = "2px solid #dc3545";
+            } else {
+                document.getElementById(`card-${i}`).style.border = "1px solid #e0e0e0";
+            }
+        }
+
+        if (unanswered) {
+            alert("尚有題目未作答，請完成後再提交！");
+            return;
+        }
+
+        // 計分
+        currentQuestions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`).value;
+            const explDiv = document.getElementById(`expl-${index}`);
+            const cardDiv = document.getElementById(`card-${index}`);
+            
+            explDiv.style.display = 'block'; // 顯示解析
+
+            if (selected === q.answer) {
+                score += 10;
+                explDiv.innerHTML = `<span class="correct-text">✅ 正確！</span> ` + explDiv.innerText;
+                cardDiv.style.borderLeft = "5px solid #28a745";
+            } else {
+                explDiv.innerHTML = `<span class="wrong-text">❌ 錯誤！</span> 正確答案為：<strong>${q.answer}</strong><br><br>` + explDiv.innerText;
+                cardDiv.style.borderLeft = "5px solid #dc3545";
+                cardDiv.style.backgroundColor = "#fff5f5";
+            }
+        });
+
+        // 顯示結果
+        const resultArea = document.getElementById('result-area');
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.style.display = 'none';
+        resultArea.style.display = 'block';
+
+        if (score >= 90) {
+            resultArea.className = 'pass';
+            resultArea.innerHTML = `
+                <div class="score-display">${score} 分</div>
+                <h2>🎉 恭喜通過認證！</h2>
+                <p>您已精確掌握本行頂級卡與同業的優勢差異。</p>
+                <div class="retry-btn" onclick="initQuiz()">再次測驗</div>
+            `;
+        } else {
+            resultArea.className = 'fail';
+            resultArea.innerHTML = `
+                <div class="score-display">${score} 分</div>
+                <h2>⚠️ 未達標準 (需 90 分)</h2>
+                <p>請加強複習「同業 PK 表」中的機場接送與停車門檻差異，避免銷售時被客戶問倒。</p>
+                <div class="retry-btn" onclick="initQuiz()">重新測驗</div>
+            `;
+        }
+        
+        resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 啟動
+    window.onload = initQuiz;
+</script>
+
+</body>
+</html>
